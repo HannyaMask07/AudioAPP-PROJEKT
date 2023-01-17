@@ -1,0 +1,30 @@
+﻿@model List<AudioAPP.Models.Audio>
+@{
+}
+<h1 class="text-uppercase m-1">Pliki MP3</h1>
+<a asp-controller="Audio" asp-action="Add" class="btn btn-success m-2">Dodaj</a>
+<div class="container border p-2 list-group" style="width:100%">
+
+    
+    @for(int i=Model.Count()-1;i>=0;i--)
+    {
+        <div class="container m-2 p-2 border rounded">
+            <h2 class="text-center">@Model[i].Title</h2>
+            <div class="text-center">
+            @if (Model[i].Image is not null)
+            {
+                var base64 = Convert.ToBase64String(Model[i].Image);
+                var imgsrc = string.Format($"data:image/gif;base64,{base64}");
+                <img  src ="@imgsrc" />
+            }
+            @if (Model[i].Sound is not null)
+            {
+                var base64 = Convert.ToBase64String(Model[i].Sound);
+                var audiosrc = string.Format($"data:audio/wav;base64,{base64}");
+                <audio controls src ="@audiosrc" />
+            }
+            @Model[i].Description</div>
+        </div>
+    }
+
+</div>
