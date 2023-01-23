@@ -8,12 +8,11 @@ namespace AudioAPP.Models
         [HiddenInput]
         public int Id { get; set; }
         //[Required(ErrorMessage = "Podaj tytuł")]
-        public string Title { get; set; }
-        [HiddenInput]
-        public byte[] Image { get; set; }
-        [HiddenInput]
-        public byte[] Sound { get; set; }
-        public string Description { get; set; }
+        public string ?Title { get; set; }
+        public byte[] ?Image { get; set; }
+        public byte[] ?Sound { get; set; }
+        //[Required(ErrorMessage = "Proszę podać opis")]
+        public string ?Description { get; set; }
 
     }
 }
