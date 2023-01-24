@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using AudioAPP.Models;
-using AudioAPP.Data;
+using AudioAPP.Data.Repository.Repository;
+using AudioAPP.Data.FileManager;
 
 namespace AudioAPP
 {
@@ -22,7 +23,7 @@ namespace AudioAPP
                 options => options.UseSqlServer(builder.Configuration["Data:Connection"]));
 
             builder.Services.AddTransient<IRepository, Repository>();
-
+            builder.Services.AddTransient<IFileManager, FileManager>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

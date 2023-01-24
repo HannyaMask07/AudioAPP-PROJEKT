@@ -1,27 +1,29 @@
-﻿@model List<AudioAPP.Models.Audio>
+﻿@model IEnumerable<AudioAPP.Models.Audio>
 @{
 }
 <h1 class="text-uppercase m-1">Pliki MP3</h1>
-<a asp-controller="Audio" asp-action="Add" class="btn btn-success m-2">Dodaj</a>
+
 <div class="container border p-2 list-group" style="width:100%">
 
-    @foreach (var audio in Model)
+    @foreach (var audio in @Model)
     {
+
+
         <div class="container m-2 p-2 border rounded">
+        <a asp-action="Edit" asp-route-id="@audio.Id">Edit</a> |
+        <a asp-action="Remove" asp-route-id="@audio.Id">Delete</a> 
             <h2 class="text-center">@audio.Title</h2>
+            @if (!String.IsNullOrEmpty(@audio.Image))
+            {
+                var image_path = $"/Image/{@audio.Image}";
+                <img src= @image_path/>
+            }
+           @if (!String.IsNullOrEmpty(@audio.Sound))
+            {
+                var sound_path = $"/Sound/{@audio.Sound}";
+                <audio controls src = @sound_path/>
+            }
             <div class="text-center">
-            @if (@audio.Image is not null)
-            {
-                var base64 = Convert.ToBase64String(audio.Image);
-                var imgsrc = string.Format($"data:image/gif;base64,{base64}");
-                <img  src ="@imgsrc" />
-            }
-            @if (@audio.Sound is not null)
-            {
-                var base64 = Convert.ToBase64String(audio.Sound);
-                var audiosrc = string.Format($"data:audio/wav;base64,{base64}");
-                <audio controls src ="@audiosrc" />
-            }
             @audio.Description</div>
         </div>
         

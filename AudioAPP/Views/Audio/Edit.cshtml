@@ -1,0 +1,30 @@
+﻿@model AudioAPP.ViewModels.AudioViewModel
+
+@{
+}
+<h1>Edit</h1>
+
+<div class="container p-3 border">
+    <form asp-controller="Audio" asp-action="Edit" method="post" enctype="multipart/form-data">
+         <input asp-for="Id" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="Title">Tytuł</label>
+            <input asp-for="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description">Treść:</label>
+            <input asp-for="Description" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+         <div class="mb-3">
+            <label>Obrazek</label>
+            <input asp-for="Image" />
+        </div>
+        <div class="mb-3">
+            <label>Dzwięk</label>
+            <input asp-for="Sound" />
+        </div>
+        <button type="submit" value="Submit" class="btn btn-primary">Dalej</button>
+    </form>
+</div>
