@@ -17,12 +17,12 @@
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
          <div class="mb-3">
-            <label asp-for="Description">Obraz:</label>
-            <input asp-for="Image" />
+            <label asp-for="Image">Obraz:</label>
+            <input asp-for="Image" accept="image/*" />
         </div>
         <div class="mb-3">
-            <label asp-for="Description">Dzwięk:</label>
-            <input asp-for="Sound" />
+            <label asp-for="Sound">Dzwięk:</label>
+            <input asp-for="Sound" accept="audio/*" />
         </div>
         <button type="submit" class="btn btn-primary">Dalej</button>
     </form>

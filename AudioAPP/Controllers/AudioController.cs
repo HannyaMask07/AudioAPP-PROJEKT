@@ -2,10 +2,12 @@
 using AudioAPP.Data.Repository.Repository;
 using AudioAPP.Models;
 using AudioAPP.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AudioApp.Controllers
 {
+    
     public class AudioController : Controller
     {
         private readonly IRepository _repository;
@@ -28,6 +30,7 @@ namespace AudioApp.Controllers
             var audio = _repository.GetAudio(id);
             return View(audio);
         }
+        [Authorize]
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -50,6 +53,7 @@ namespace AudioApp.Controllers
             }
 
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(AudioViewModel viewModel)
         {
@@ -76,6 +80,7 @@ namespace AudioApp.Controllers
             else
                 return View(audio);
         }
+        [Authorize]
         [HttpGet]
         public async Task <IActionResult> Remove(int id)
         {
@@ -83,11 +88,13 @@ namespace AudioApp.Controllers
             await _repository.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize]
         [HttpGet]
         public IActionResult Add()
         {
             return View("Create");
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(Audio audio)
         {
@@ -98,12 +105,14 @@ namespace AudioApp.Controllers
             else
                 return View(audio);
         }
+        
         [HttpGet("/Image/{image}")]
         public IActionResult Image(string image)
         {
             var mime = image.Substring(image.LastIndexOf('.') + 1);
             return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
         }
+        
         [HttpGet("/Sound/{sound}")]
         public IActionResult Sound(string sound)
         {

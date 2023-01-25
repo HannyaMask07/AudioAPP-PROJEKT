@@ -10,23 +10,36 @@
 
 
         <div class="container m-2 p-2 border rounded">
-        <a asp-action="Edit" asp-route-id="@audio.Id">Edit</a> |
-        <a asp-action="Remove" asp-route-id="@audio.Id">Delete</a> 
+            @if(User.Identity.IsAuthenticated)
+            {
+                <a asp-action="Edit" asp-route-id="@audio.Id">Edit</a> 
+                <l>|</l>
+                <a asp-action="Remove" asp-route-id="@audio.Id">Delete</a>  
+            }
+
             <h2 class="text-center">@audio.Title</h2>
+
             @if (!String.IsNullOrEmpty(@audio.Image))
             {
                 var image_path = $"/Image/{@audio.Image}";
-                <img src= @image_path/>
+                <h2 class="text-center">
+                <image src= @image_path  Width="300" Height="220" />
+                </h2>
             }
            @if (!String.IsNullOrEmpty(@audio.Sound))
             {
                 var sound_path = $"/Sound/{@audio.Sound}";
+                 <h2 class="text-center">
                 <audio controls src = @sound_path/>
+                </h2>
             }
             <div class="text-center">
             @audio.Description</div>
+            <div class="text-right">
+            Created:
+            @audio.Created</div>
         </div>
         
     }
 
-</div>
+</>
