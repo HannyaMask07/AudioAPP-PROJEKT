@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<AudioAPP.Models.Audio>
+@inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Identity
 @{
 }
 <h1 class="text-uppercase m-1">Pliki MP3</h1>
 
 <div class="container border p-2 list-group" style="width:100%">
+
 
     @foreach (var audio in @Model)
     {
@@ -12,9 +15,9 @@
         <div class="container m-2 p-2 border rounded">
             @if(User.Identity.IsAuthenticated)
             {
-                <a asp-action="Edit" asp-route-id="@audio.Id">Edit</a> 
+                <a asp-action="Edit" asp-route-id="@audio.AudioId">Edit</a> 
                 <l>|</l>
-                <a asp-action="Remove" asp-route-id="@audio.Id">Delete</a>  
+                <a asp-action="Remove" asp-route-id="@audio.AudioId">Delete</a>  
             }
 
             <h2 class="text-center">@audio.Title</h2>
@@ -33,11 +36,36 @@
                 <audio controls src = @sound_path/>
                 </h2>
             }
+
+            <div class = "comment-section">
+
+                @{
+                    await Html.RenderPartialAsync("Comments", new CommentViewModel { AudioId = @audio.AudioId });
+                }
+
+            </div>
+
             <div class="text-center">
             @audio.Description</div>
             <div class="text-right">
             Created:
             @audio.Created</div>
+            Author:
+            @if(@audio.Author is not null)
+            {
+                @audio.Author.Name
+            }
+
+
+            @if (@audio.Comments is not null)
+            {
+               @foreach (var item in @audio.Comments)
+               {
+                <p>
+                   @item.Message
+                </p>
+               }
+            }
         </div>
         
     }

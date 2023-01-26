@@ -1,5 +1,6 @@
 ﻿using AudioAPP.Areas.Identity.Pages.Data;
 using AudioAPP.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace AudioAPP.Data.Repository.Repository
@@ -24,7 +25,10 @@ namespace AudioAPP.Data.Repository.Repository
 
         public Audio GetAudio(int id)
         {
-            return _context.Audios.FirstOrDefault(x => x.Id == id);
+            return _context.Audios
+                .Include(a => a.Comments)
+                .Include(a => a.Author)
+                .FirstOrDefault(x => x.AudioId == id);
         }
 
         public void RemoveAudio(int id)

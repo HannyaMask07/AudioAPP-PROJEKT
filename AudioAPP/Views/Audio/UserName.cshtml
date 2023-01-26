@@ -1,0 +1,12 @@
+﻿@model AudioAPP.ViewModels.CommentViewModel
+
+@{
+}
+
+<div>
+    <form method="post" asp-controller="Audio" asp-action="Comment">
+        <input asp-for="AudioId" type="hidden"/>
+        <input asp-for="Message"/>
+        <button type="submit" class="btn btn-primary">Skomentuj</button>
+    </form>
+</div>

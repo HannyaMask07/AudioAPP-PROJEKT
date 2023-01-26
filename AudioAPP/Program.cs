@@ -26,6 +26,7 @@ namespace AudioAPP
                 .AddEntityFrameworkStores<AppDbContext>();
 
             builder.Services.AddTransient<IRepository, Repository>();
+            builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddTransient<IFileManager, FileManager>();
             var app = builder.Build();
 

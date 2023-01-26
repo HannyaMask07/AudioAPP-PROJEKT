@@ -8,6 +8,7 @@ namespace AudioAPP.Data.Repository.Repository
         List<Audio> GetAllAudios();
         void AddAudio(Audio audio);
         void UpdateAudio(Audio audio);
+        //void AddComment(Comment comment);
         void RemoveAudio(int id);
         Task<bool> SaveChangesAsync();
     }

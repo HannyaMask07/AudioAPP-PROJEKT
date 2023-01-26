@@ -20,7 +20,7 @@
 
         public async Task<string> SaveImage(IFormFile image)
         {
-            try
+            if(image is not null)
             {
                 var save_path = Path.Combine(_imagePath);
                 if (!Directory.Exists(save_path))
@@ -37,16 +37,16 @@
 
                 return fileName;
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e.Message);
-                return "Error";
+                var fileName = "unnamed.png";
+                return fileName;
             }
         }
 
         public async Task<string> SaveSound(IFormFile sound)
         {
-            try
+            if (sound is not null)
             {
                 var save_path = Path.Combine(_soundPath);
                 if (!Directory.Exists(save_path))
@@ -63,10 +63,10 @@
 
                 return fileName;
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e.Message);
-                return "Error";
+                var fileName = "unnamed.wav";
+                return fileName;
             }
         }
 

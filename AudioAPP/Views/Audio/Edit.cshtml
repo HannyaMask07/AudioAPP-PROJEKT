@@ -24,6 +24,7 @@
         <div class="mb-3">
             <label>Dzwięk</label>
             <input asp-for="Sound" accept="audio/*"/>
+             <span asp-validation-for="Sound" class="text-danger"></span>
         </div>
         <button type="submit" value="Submit" class="btn btn-primary">Dalej</button>
     </form>
