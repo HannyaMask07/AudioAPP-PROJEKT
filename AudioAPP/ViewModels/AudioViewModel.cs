@@ -6,6 +6,10 @@ namespace AudioAPP.ViewModels
 {
     public class AudioViewModel
     {
+        public AudioViewModel()
+        {
+            Comments = new List<Comment>();
+        }
         [HiddenInput]
         public int Id { get; set; }
         [Required(ErrorMessage = "Proszę podać tytuł")]
@@ -16,7 +20,8 @@ namespace AudioAPP.ViewModels
         [Required(ErrorMessage = "Proszę podać opis")]
         public string? Description { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
-        public ICollection<Comment>? Comments { get; set; }
+        public string? Author { get; set; }
+        public List<Comment> Comments { get; set; }
 
     }
 }

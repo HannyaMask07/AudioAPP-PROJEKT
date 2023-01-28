@@ -6,6 +6,10 @@ namespace AudioAPP.Models
 {
     public class Audio
     {
+        public Audio()
+        {
+            Comments = new List<Comment>();
+        }
         [HiddenInput]
         public int AudioId { get; set; }
         [Required(ErrorMessage = "Proszę podać tytuł")]
@@ -16,7 +20,7 @@ namespace AudioAPP.Models
         [Required(ErrorMessage = "Proszę podać opis")]
         public string ?Description { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
-        public ICollection<Comment> ?Comments { get; set; }
-        public Author ?Author { get; set; }
+        public string? Author { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

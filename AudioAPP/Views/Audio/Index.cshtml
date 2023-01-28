@@ -38,11 +38,8 @@
             }
 
             <div class = "comment-section">
-
-                @{
-                    await Html.RenderPartialAsync("Comments", new CommentViewModel { AudioId = @audio.AudioId });
-                }
-
+                    <a button asp-action="Comment" class="btn btn-primary"  asp-route-id="@audio.AudioId" >Skomentuj</a>
+                    <a button asp-action="CommentDetails" class="btn btn-primary"  asp-route-id="@audio.AudioId" >Sprawdz Komentarze</a>
             </div>
 
             <div class="text-center">
@@ -51,11 +48,6 @@
             Created:
             @audio.Created</div>
             Author:
-            @if(@audio.Author is not null)
-            {
-                @audio.Author.Name
-            }
-
 
             @if (@audio.Comments is not null)
             {

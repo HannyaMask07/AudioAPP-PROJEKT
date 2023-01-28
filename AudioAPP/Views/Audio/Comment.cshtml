@@ -1,0 +1,30 @@
+﻿@model AudioAPP.Model.Comment
+
+@{
+}
+<h1>Create</h1>
+
+<div class="container p-3 border">
+    <form asp-controller="Audio" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label asp-for="Title">Tytuł</label>
+            <input asp-for="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description">Treść:</label>
+            <input asp-for="Description" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+         <div class="mb-3">
+            <label asp-for="Image">Obraz:</label>
+            <input asp-for="Image" accept="image/*" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Sound">Dzwięk:</label>
+            <input asp-for="Sound" accept="audio/*" />
+            <span asp-validation-for="Sound" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Dalej</button>
+    </form>
+</div>

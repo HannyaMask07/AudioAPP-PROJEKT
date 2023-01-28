@@ -8,39 +8,107 @@ namespace AudioAPP.Data.Repository.Repository
     public class Repository : IRepository
     {
         private readonly AppDbContext _context;
-
-        public Repository(AppDbContext context)
+        private readonly ILogger<Repository> _logger;
+        public Repository(AppDbContext context, ILogger<Repository> logger)
         {
             _context = context;
+            _logger = logger;
         }
-        public void AddAudio(Audio audio)
+        public Audio? Save(Audio? audio)
         {
-            _context.Audios.Add(audio);
+            try
+            {
+                //foreach (var comment in audio.Comments)
+                //{
+                //    _context.Attach(comment);
+                //}
+
+                var entityEntry = _context.Audios.Add(audio);
+                _context.SaveChanges();
+                return entityEntry.Entity;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e.Message);
+                return null;
+            }
+        }
+        public async Task<Audio?> SaveAsync(Audio? audio)
+        {
+            try
+            {
+                foreach (var comment in audio.Comments)
+                {
+                    _context.Attach(comment);
+                }
+
+                var entityEntry = _context.Audios.Add(audio);
+                await _context.SaveChangesAsync();
+                return entityEntry.Entity;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return null;
+            }
         }
 
-        public List<Audio> GetAllAudios()
+
+        public bool Delete(int? id)
+        {
+            if (id is null)
+            {
+                return false;
+            }
+            var find = _context.Audios.Find(id);
+            if (find is not null)
+            {
+                _context.Audios.Remove(find);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        public bool Update(Audio? audio)
+        {
+            try
+            {
+                var find = _context.Audios.Find(audio.AudioId);
+                if (find is not null)
+                {
+                    find.Title = audio.Title;
+                    find.Description = audio.Description;
+                    find.Image = audio.Image;
+                    find.Sound = audio.Sound;
+                    find.Comments = audio.Comments;
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+        }
+
+        public IEnumerable<Audio?> FindAll()
         {
             return _context.Audios.ToList();
         }
 
-        public Audio GetAudio(int id)
+        public Audio? FindBy(int? id)
         {
-            return _context.Audios
-                .Include(a => a.Comments)
-                .Include(a => a.Author)
-                .FirstOrDefault(x => x.AudioId == id);
+            Audio? audio = _context.Audios.FirstOrDefault(b => b.AudioId == id);
+            _context.Entry(audio).State = EntityState.Detached;
+            return id is null ? null : audio;
         }
-
-        public void RemoveAudio(int id)
+        public Comment? FindByAudioComment(int? id)
         {
-            _context.Audios.Remove(GetAudio(id));
+            Comment? comment = _context.Comments.FirstOrDefault(b => b.Audios.AudioId == id);
+            _context.Entry(comment).State = EntityState.Detached;
+            return id is null ? null : comment;
         }
-
-        public void UpdateAudio(Audio audio)
-        {
-            _context.Audios.Update(audio);
-        }
-
         public async Task<bool> SaveChangesAsync()
         {
             if (await _context.SaveChangesAsync() > 0)
@@ -52,5 +120,11 @@ namespace AudioAPP.Data.Repository.Repository
                 return false;
             }
         }
+        public void SaveChanges()
+        {
+
+            _context.SaveChanges();
+        }
+
     }
 }

@@ -26,78 +26,13 @@ namespace AudioApp.Controllers
 
         public IActionResult Index()
         {
-            var audios = _repository.GetAllAudios();
+            var audios = _repository.FindAll();
             return View(audios);
         }
-        public IActionResult Audio(int id)
+        public IActionResult Details(int? id)
         {
-            var audio = _repository.GetAudio(id);
-            return View(audio);
-        }
-        [Authorize]
-        [HttpGet]
-        public IActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return View(new AudioViewModel());
-            }
-            else
-            {
-                var audio = _repository.GetAudio((int)id);
-                return View(new AudioViewModel
-                {
-                    Id = audio.AudioId,
-                    Title = audio.Title,
-                    Description = audio.Description
-
-                });
-
-
-            }
-
-        }
-        [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> Edit(AudioViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var audio = new Audio
-                {
-                    AudioId = viewModel.Id,
-                    Title = viewModel.Title,
-                    Description = viewModel.Description,
-                    Image = await _fileManager.SaveImage(viewModel.Image),
-                    Sound = await _fileManager.SaveSound(viewModel.Sound)
-                };
-
-                if (audio.AudioId > 0)
-                {
-                    _repository.UpdateAudio(audio);
-                }
-                else
-                {
-                    _repository.AddAudio(audio);
-                }
-
-                if (await _repository.SaveChangesAsync())
-                    return RedirectToAction("Index");
-                else
-                    return View(audio);
-            }
-            else
-            {
-                return View();
-            }
-        }
-        [Authorize]
-        [HttpGet]
-        public async Task <IActionResult> Remove(int id)
-        {
-           _repository.RemoveAudio(id);
-            await _repository.SaveChangesAsync();
-            return RedirectToAction("Index");
+            var audio = _repository.FindBy(id);
+            return audio is null ? NotFound() : View(audio);
         }
         [Authorize]
         [HttpGet]
@@ -120,22 +55,85 @@ namespace AudioApp.Controllers
                     Description = viewModel.Description,
                     Image = await _fileManager.SaveImage(viewModel.Image),
                     Sound = await _fileManager.SaveSound(viewModel.Sound),
-                    Author = {Name = Autor}
+                    Author = Autor
                 };
-                _repository.AddAudio(audio);
-          
-
-                if (await _repository.SaveChangesAsync())
-                    return RedirectToAction("Index");
-                else
-                    return View(audio);
+                await _repository.SaveAsync(audio);
+                return RedirectToAction(nameof(Index));
             }
             else
             {
                 return View();
             }
         }
-        
+        [Authorize]
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return View(new AudioViewModel());
+            }
+            else
+            {
+                var audio = _repository.FindBy((int)id);
+                return View(new AudioViewModel
+                {
+                    Id = audio.AudioId,
+                    Title = audio.Title,
+                    Description = audio.Description,
+                    Author = audio.Author,
+                    Comments = audio.Comments
+
+                }) ;
+
+
+            }
+
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(AudioViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var audio = new Audio
+                {
+                    AudioId = viewModel.Id,
+                    Title = viewModel.Title,
+                    Description = viewModel.Description,
+                    Image = await _fileManager.SaveImage(viewModel.Image),
+                    Sound = await _fileManager.SaveSound(viewModel.Sound),
+                    Author = viewModel.Author,
+                    Comments = viewModel.Comments
+                };
+                if (audio.AudioId > 0)
+                {
+                    _repository.Update(audio);
+                }
+                else
+                {
+                    _repository.Save(audio);
+                }
+                await _repository.SaveAsync(audio);
+                    return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View();
+            }
+        }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Remove(int id)
+        {
+            if (_repository.Delete(id))
+            {
+                await _repository.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return Problem("Trying delete no existing audio");
+        }
+
         [HttpGet("/Image/{image}")]
         public IActionResult Image(string image)
         {
@@ -150,25 +148,25 @@ namespace AudioApp.Controllers
             return new FileStreamResult(_fileManager.SoundStream(sound), $"sound/{mime}");
         }
         [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> Comment(CommentViewModel viewModel)
+        [HttpGet]
+        public IActionResult Comment()
         {
-
-            if (!ModelState.IsValid)
-                return RedirectToAction("Index", new { id = viewModel.AudioId});
-
-            var audio = _repository.GetAudio(viewModel.AudioId);
-            audio.Comments = audio.Comments ?? new List<Comment>();
-            audio.Comments.Add(new Comment
-            {
-                Message = viewModel.Message,
-            });
-            var comments = audio.Comments.Count();
-
-            _repository.UpdateAudio(audio);
-            await _repository.SaveChangesAsync();
-            return RedirectToAction("Index", new { id = viewModel.AudioId });
-
+            return View();
         }
+        //[Authorize]
+        //[HttpPost]
+        //public async Task<IActionResult> Comment(Comment comment)
+        //{
+        //    var audio = _repository.FindBy(audio.AudioId);
+        //    audio.Comments.Add(new Comment
+        //    {
+        //        Message = viewModel.Message,
+        //        Audios = { AudioId = viewModel.AudioId }
+        //    });
+        //    _repository.Update(audio);
+        //    await _repository.SaveAsync(audio);
+        //    return RedirectToAction("Index", new { id = viewModel.AudioId });
+
+        //}
     }
 }

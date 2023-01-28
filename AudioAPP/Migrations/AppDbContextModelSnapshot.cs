@@ -24,14 +24,14 @@ namespace AudioAPP.Migrations
 
             modelBuilder.Entity("AudioAPP.Models.Audio", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AudioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AudioId"), 1L, 1);
 
-                    b.Property<int?>("AuthorId")
-                        .HasColumnType("int");
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -51,27 +51,9 @@ namespace AudioAPP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
+                    b.HasKey("AudioId");
 
                     b.ToTable("Audios");
-                });
-
-            modelBuilder.Entity("AudioAPP.Models.Author", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("AudioAPP.Models.Comment", b =>
@@ -82,7 +64,7 @@ namespace AudioAPP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("AudioId")
+                    b.Property<int>("AudiosAudioId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
@@ -94,7 +76,7 @@ namespace AudioAPP.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AudioId");
+                    b.HasIndex("AudiosAudioId");
 
                     b.ToTable("Comments");
                 });
@@ -301,20 +283,15 @@ namespace AudioAPP.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AudioAPP.Models.Audio", b =>
-                {
-                    b.HasOne("AudioAPP.Models.Author", "Author")
-                        .WithMany("Audios")
-                        .HasForeignKey("AuthorId");
-
-                    b.Navigation("Author");
-                });
-
             modelBuilder.Entity("AudioAPP.Models.Comment", b =>
                 {
-                    b.HasOne("AudioAPP.Models.Audio", null)
+                    b.HasOne("AudioAPP.Models.Audio", "Audios")
                         .WithMany("Comments")
-                        .HasForeignKey("AudioId");
+                        .HasForeignKey("AudiosAudioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Audios");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -371,11 +348,6 @@ namespace AudioAPP.Migrations
             modelBuilder.Entity("AudioAPP.Models.Audio", b =>
                 {
                     b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("AudioAPP.Models.Author", b =>
-                {
-                    b.Navigation("Audios");
                 });
 #pragma warning restore 612, 618
         }
