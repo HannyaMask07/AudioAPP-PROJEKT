@@ -10,5 +10,8 @@ namespace AudioAPP.Models
         [Required]
         public string ?Message { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
+        public string? Author { get; set; }
+
+        public int AudioId { get; set; }
     }
 }

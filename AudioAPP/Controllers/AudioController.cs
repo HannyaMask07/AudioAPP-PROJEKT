@@ -29,6 +29,7 @@ namespace AudioApp.Controllers
             var audios = _repository.FindAll();
             return View(audios);
         }
+        [Authorize]
         public IActionResult UserAudio()
         {
             var audios = _repository.FindAll();
@@ -55,7 +56,7 @@ namespace AudioApp.Controllers
             {
                 var audio = new Audio
                 {
-                    AudioId = viewModel.Id,
+                    Id = viewModel.Id,
                     Title = viewModel.Title,
                     Description = viewModel.Description,
                     Image = await _fileManager.SaveImage(viewModel.Image),
@@ -84,7 +85,7 @@ namespace AudioApp.Controllers
                 var audio = _repository.FindBy((int)id);
                 return View(new AudioViewModel
                 {
-                    Id = audio.AudioId,
+                    Id = audio.Id,
                     Title = audio.Title,
                     Description = audio.Description,
                     Author = audio.Author,
@@ -104,7 +105,7 @@ namespace AudioApp.Controllers
             {
                 var audio = new Audio
                 {
-                    AudioId = viewModel.Id,
+                    Id = viewModel.Id,
                     Title = viewModel.Title,
                     Description = viewModel.Description,
                     Image = await _fileManager.SaveImage(viewModel.Image),
@@ -112,7 +113,7 @@ namespace AudioApp.Controllers
                     Author = viewModel.Author,
                     Comments = viewModel.Comments
                 };
-                if (audio.AudioId > 0)
+                if (audio.Id > 0)
                 {
                     _repository.Update(audio);
                 }
@@ -155,23 +156,44 @@ namespace AudioApp.Controllers
         }
         [Authorize]
         [HttpGet]
-        public IActionResult AddComment()
+        public IActionResult AddComment(int? id)
         {
-            return View();
-        }
-        //[Authorize]
-        //[HttpPost]
-        //public async Task<IActionResult> Comment(Comment comment)
-        //{
-        //    var audio = _repository.FindBy(audio.AudioId);
-        //    audio.Comments.Add(new Comment
-        //    {
-        //        Message = comment.Message,
-        //    });
-        //    _repository.Update(audio);
-        //    await _repository.SaveAsync(audio);
-        //    return RedirectToAction("Index", new { id = viewModel.AudioId });
+            if (id == null)
+            {
+                return View(new AudioViewModel());
+            }
+            else
+            {
+                var audio = _repository.FindBy((int)id);
+                return View(new CommentViewModel
+                {
+                    AudioId = audio.Id,
+                });
 
-        //}
+
+            }
+
+        }
+        [Authorize]
+        [HttpPost]
+        public IActionResult AddComment(CommentViewModel model)
+        {
+            var Autor = _userManager.GetUserName(User);
+
+            var audio = _repository.FindBy(model.AudioId);
+
+            var comment = new Comment
+            {
+                Message = model.Message,
+                Author = Autor,
+                AudioId = model.AudioId,
+            };
+
+            audio.Comments.Add(comment);
+            _repository.SaveComment(comment);
+            _repository.Update(audio);
+            _repository.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -24,11 +24,11 @@ namespace AudioAPP.Migrations
 
             modelBuilder.Entity("AudioAPP.Models.Audio", b =>
                 {
-                    b.Property<int>("AudioId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AudioId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
@@ -51,7 +51,7 @@ namespace AudioAPP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AudioId");
+                    b.HasKey("Id");
 
                     b.ToTable("Audios");
                 });
@@ -64,8 +64,11 @@ namespace AudioAPP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("AudioId")
+                    b.Property<int>("AudioId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -135,6 +138,22 @@ namespace AudioAPP.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "af16734f-9ef9-4402-9e45-6e8039f0f5f3",
+                            ConcurrencyStamp = "007c89cd-1c12-48dc-a2f9-53cd4bb46c44",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "5597d974-43a2-43c3-b82a-b4f7b58bf886",
+                            ConcurrencyStamp = "2ed35202-f341-46b2-91b3-bf91fbf726fd",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -316,7 +335,9 @@ namespace AudioAPP.Migrations
                 {
                     b.HasOne("AudioAPP.Models.Audio", null)
                         .WithMany("Comments")
-                        .HasForeignKey("AudioId");
+                        .HasForeignKey("AudioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

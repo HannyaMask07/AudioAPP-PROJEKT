@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AudioAPP.Models.Audio>
+﻿@model List<AudioAPP.Models.Audio>
 @inject UserManager<IdentityUser> UserManager
 @using Microsoft.AspNetCore.Identity
 @{
@@ -15,9 +15,9 @@
         <div class="container m-2 p-2 border rounded">
             @if (User.Identity.IsAuthenticated && @audio.Author == @UserManager.GetUserName(User))
             {
-                 <a button asp-action="Edit" class="btn btn-warning"  asp-route-id="@audio.AudioId" >Edit</a>
+                 <a button asp-action="Edit" class="btn btn-warning"  asp-route-id="@audio.Id" >Edit</a>
                                  <l>      </l>
-                  <a button asp-action="Remove" class="btn btn-danger"  asp-route-id="@audio.AudioId" >Remove</a>
+                  <a button asp-action="Remove" class="btn btn-danger"  asp-route-id="@audio.Id" >Remove</a>
             }
 
             <h2 class="text-center">@audio.Title</h2>
@@ -37,28 +37,27 @@
                 </h2>
             }
 
-            <div class = "comment-section">
-                    <a button asp-action="Comment" class="btn btn-primary"  asp-route-id="@audio.AudioId" >Skomentuj</a>
-                    <a button asp-action="CommentDetails" class="btn btn-info"  asp-route-id="@audio.AudioId" >Sprawdz Komentarze</a>
-                    <a button asp-action="Details" class="btn btn-secondary" asp-route-id="@audio.AudioId">Details</a> 
-            </div>
-
             <div class="text-center">
             @audio.Description</div>
-            <div class="text-right">
-            Created:
-            @audio.Created</div>
-            Author:
-            @audio.Author
 
+            <div class = "comment-section">
+                    <a button asp-action="AddComment" class="btn btn-primary"  asp-route-id="@audio.Id" >Skomentuj</a>
+                    <a button asp-action="Details" class="btn btn-secondary" asp-route-id="@audio.Id">Details</a> 
+            </div>
             @if (@audio.Comments is not null)
-            {
+            {                <h1 class="text-uppercase m-1">Komentarze</h1>
+               <div class="container m-2 p-2 border rounded">
                @foreach (var item in @audio.Comments)
                {
-                <p>
+                 <div class = "comment-section">
+                   @item.Author :
                    @item.Message
-                </p>
+                   //
+                   @item.Created
+                 </div>
+
                }
+               </div>
             }
         </div>
         

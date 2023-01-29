@@ -11,16 +11,18 @@ namespace AudioAPP.Models
             Comments = new List<Comment>();
         }
         [HiddenInput]
-        public int AudioId { get; set; }
+        public int Id { get; set; }
         [Required(ErrorMessage = "Proszę podać tytuł")]
-        public string ?Title { get; set; }
+        public string? Title { get; set; }
         public string ?Image { get; set; }
         [Required(ErrorMessage= "Proszę dodac plik audio")]
-        public string ?Sound { get; set; }
+        public string? Sound { get; set; }
         [Required(ErrorMessage = "Proszę podać opis")]
-        public string ?Description { get; set; }
+        public string? Description { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
         public string? Author { get; set; }
+
+
         public List<Comment> Comments { get; set; }
     }
 }

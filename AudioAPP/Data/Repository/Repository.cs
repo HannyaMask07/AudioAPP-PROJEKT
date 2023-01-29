@@ -73,13 +73,15 @@ namespace AudioAPP.Data.Repository.Repository
         {
             try
             {
-                var find = _context.Audios.Find(audio.AudioId);
+                var find = _context.Audios.Find(audio.Id);
                 if (find is not null)
                 {
                     find.Title = audio.Title;
                     find.Description = audio.Description;
                     find.Image = audio.Image;
                     find.Sound = audio.Sound;
+                    find.Author = audio.Author;
+                    find.Comments = audio.Comments;
                     _context.SaveChanges();
                     return true;
                 }
@@ -93,12 +95,12 @@ namespace AudioAPP.Data.Repository.Repository
 
         public IEnumerable<Audio?> FindAll()
         {
-            return _context.Audios.ToList();
+            return _context.Audios.Include(a => a.Comments).ToList();
         }
 
         public Audio? FindBy(int? id)
         {
-            Audio? audio = _context.Audios.FirstOrDefault(b => b.AudioId == id);
+            Audio? audio = _context.Audios.Include(a => a.Comments).FirstOrDefault(b => b.Id == id);
             _context.Entry(audio).State = EntityState.Detached;
             return id is null ? null : audio;
         }
@@ -178,6 +180,26 @@ namespace AudioAPP.Data.Repository.Repository
         public IEnumerable<Profile?> FindAllProfiles()
         { 
             return _context.Profiles.ToList();
+        }
+
+        public Comment? SaveComment(Comment? comment)
+        {
+            try
+            {
+                //foreach (var comment in audio.Comments)
+                //{
+                //    _context.Attach(comment);
+                //}
+
+                var entityEntry = _context.Comments.Add(comment);
+                _context.SaveChanges();
+                return entityEntry.Entity;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return null;
+            }
         }
     }
 }

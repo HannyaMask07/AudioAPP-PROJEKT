@@ -40,7 +40,7 @@ namespace AudioAPP.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Audio audio)
         {
-            audio.AudioId = (int)id;
+            audio.Id = (int)id;
             if (_repository.Update(audio))
             {
                 return BadRequest();

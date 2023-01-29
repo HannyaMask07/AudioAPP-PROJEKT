@@ -20,6 +20,7 @@ namespace AudioAPP.Controllers
             _fileManager = fileManager;
             _userManager = userManager;
         }
+        [Authorize]
         public IActionResult Index()
         {
             var profilePosts = _repository.FindAllProfiles();
