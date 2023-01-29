@@ -29,6 +29,11 @@ namespace AudioApp.Controllers
             var audios = _repository.FindAll();
             return View(audios);
         }
+        public IActionResult UserAudio()
+        {
+            var audios = _repository.FindAll();
+            return View("UserAudio", audios);
+        }
         public IActionResult Details(int? id)
         {
             var audio = _repository.FindBy(id);
@@ -56,6 +61,7 @@ namespace AudioApp.Controllers
                     Image = await _fileManager.SaveImage(viewModel.Image),
                     Sound = await _fileManager.SaveSound(viewModel.Sound),
                     Author = Autor
+
                 };
                 await _repository.SaveAsync(audio);
                 return RedirectToAction(nameof(Index));
@@ -149,7 +155,7 @@ namespace AudioApp.Controllers
         }
         [Authorize]
         [HttpGet]
-        public IActionResult Comment()
+        public IActionResult AddComment()
         {
             return View();
         }
@@ -160,8 +166,7 @@ namespace AudioApp.Controllers
         //    var audio = _repository.FindBy(audio.AudioId);
         //    audio.Comments.Add(new Comment
         //    {
-        //        Message = viewModel.Message,
-        //        Audios = { AudioId = viewModel.AudioId }
+        //        Message = comment.Message,
         //    });
         //    _repository.Update(audio);
         //    await _repository.SaveAsync(audio);

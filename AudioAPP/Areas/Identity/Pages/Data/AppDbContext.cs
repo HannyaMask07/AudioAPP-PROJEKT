@@ -9,6 +9,8 @@ namespace AudioAPP.Areas.Identity.Pages.Data
     {
         public DbSet<Audio> Audios { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
+        //public DbSet<Priority> Priorities { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
 

@@ -12,6 +12,10 @@ namespace AudioAPP.Data.Repository.Repository
         public IEnumerable<Audio?> FindAll();
         public Comment? FindByAudioComment(int? id);
         Task<bool> SaveChangesAsync();
+        public Profile? SaveProfile(Profile? profile);
+        public Profile? FindByProfile(int? id);
+        public bool UpdateProfile(Profile? profile);
+        public IEnumerable<Profile?> FindAllProfiles();
 
         //Audio GetAudio(int id);
         //List<Audio> GetAllAudios();

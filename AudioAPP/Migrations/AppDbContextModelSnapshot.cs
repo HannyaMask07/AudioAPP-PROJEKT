@@ -64,7 +64,7 @@ namespace AudioAPP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AudiosAudioId")
+                    b.Property<int?>("AudioId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
@@ -76,9 +76,38 @@ namespace AudioAPP.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AudiosAudioId");
+                    b.HasIndex("AudioId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("AudioAPP.Models.Profile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -285,13 +314,9 @@ namespace AudioAPP.Migrations
 
             modelBuilder.Entity("AudioAPP.Models.Comment", b =>
                 {
-                    b.HasOne("AudioAPP.Models.Audio", "Audios")
+                    b.HasOne("AudioAPP.Models.Audio", null)
                         .WithMany("Comments")
-                        .HasForeignKey("AudiosAudioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Audios");
+                        .HasForeignKey("AudioId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
