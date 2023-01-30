@@ -11,7 +11,8 @@ Dodajemy do tabeli AspNetUserRoles id roli oraz id użytkownika
 
 # Użytkownik nie zalogowany
 Taki użytkownik może jedynie przeglądać posty w zakładce Audio
-#Użytkownik zalogowany
+
+# Użytkownik zalogowany
 może robić to samo co użytkownik nie zalogowany oraz:
 
 -Dodawać komentarze
