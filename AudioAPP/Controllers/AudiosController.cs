@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AudioAPP.Controllers
 {
-    [Route("api/audios")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AudiosController : ControllerBase
     {
@@ -25,25 +25,37 @@ namespace AudioAPP.Controllers
         [HttpGet("{id}", Name = "Get")]
         public ActionResult<Audio> Get(int id)
         {
-            return _repository.FindBy(id);
+            try
+            {
+                return _repository.FindBy(id);
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
         }
 
         // POST: api/Audios
         [HttpPost]
-        public ActionResult Post([FromBody] Audio audio)
+        public ActionResult<Audio> Post([FromBody] Audio audio)
         {
+            if (audio == null || !ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             _repository.Save(audio);
             return Created("", audio);
         }
 
         // PUT: api/Audios/int
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Audio audio)
+        public ActionResult<Audio> Put(int id, [FromBody] Audio audio)
         {
             audio.Id = (int)id;
             if (_repository.Update(audio))
             {
-                return BadRequest();
+                return _repository.FindBy(id);
             }
             else
             {
@@ -56,7 +68,7 @@ namespace AudioAPP.Controllers
         public IActionResult Delete(int id)
         {
             var result = _repository.Delete(id);
-            if (result == null)
+            if (result is false)
             {
                 return NotFound();
             }

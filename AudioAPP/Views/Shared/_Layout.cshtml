@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -37,6 +39,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="ProfilePost" asp-action="Index">Moje aktualności</a>
                         </li>
+                        @if(@User.IsInRole("admin"))
+                        {
+                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Audio" asp-action="AdminPanel">Admin panel </a>
+                        </li>
+                        }
                     </ul>
                 </div>
             </div>

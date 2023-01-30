@@ -69,6 +69,36 @@ namespace AudioAPP.Data.Repository.Repository
             }
             return false;
         }
+        public bool DeleteLike(int? id)
+        {
+            if (id is null)
+            {
+                return false;
+            }
+            var find = _context.AudioLikes.Find(id);
+            if (find is not null)
+            {
+                _context.AudioLikes.Remove(find);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        public bool DeleteProfilePost(int? id)
+        {
+            if (id is null)
+            {
+                return false;
+            }
+            var find = _context.Profiles.Find(id);
+            if (find is not null)
+            {
+                _context.Profiles.Remove(find);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
         public bool Update(Audio? audio)
         {
             try
@@ -82,6 +112,7 @@ namespace AudioAPP.Data.Repository.Repository
                     find.Sound = audio.Sound;
                     find.Author = audio.Author;
                     find.Comments = audio.Comments;
+                    find.AudioLikes = audio.AudioLikes;
                     _context.SaveChanges();
                     return true;
                 }
@@ -95,12 +126,24 @@ namespace AudioAPP.Data.Repository.Repository
 
         public IEnumerable<Audio?> FindAll()
         {
-            return _context.Audios.Include(a => a.Comments).ToList();
+            return _context.Audios.Include(a => a.Comments).Include(a => a.AudioLikes).ToList();
         }
-
+        public IEnumerable<Audio?> SearchFind(string search)
+        {
+            return _context.Audios.Include(a => a.Comments).Include(a => a.AudioLikes).Where(x => x.Title.Contains(search)).ToList();
+        }
+        public IEnumerable<Profile?> SearchFindProfile(string search)
+        {
+            return _context.Profiles.Where(x => x.Title.Contains(search)).ToList();
+        }
+        public IEnumerable<Profile?> TagFindProfile(int tag)
+        {
+            var enumTag = (Priority)tag;
+            return _context.Profiles.Where(x => x.Priorities.Equals(enumTag)).ToList();
+        }
         public Audio? FindBy(int? id)
         {
-            Audio? audio = _context.Audios.Include(a => a.Comments).FirstOrDefault(b => b.Id == id);
+            Audio? audio = _context.Audios.Include(a => a.Comments).Include(a => a.AudioLikes).FirstOrDefault(b => b.Id == id);
             _context.Entry(audio).State = EntityState.Detached;
             return id is null ? null : audio;
         }
@@ -192,6 +235,25 @@ namespace AudioAPP.Data.Repository.Repository
                 //}
 
                 var entityEntry = _context.Comments.Add(comment);
+                _context.SaveChanges();
+                return entityEntry.Entity;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return null;
+            }
+        }
+        public AudioLike? SaveLike(AudioLike? audioLike)
+        {
+            try
+            {
+                //foreach (var comment in audio.Comments)
+                //{
+                //    _context.Attach(comment);
+                //}
+
+                var entityEntry = _context.AudioLikes.Add(audioLike);
                 _context.SaveChanges();
                 return entityEntry.Entity;
             }

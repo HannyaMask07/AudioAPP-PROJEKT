@@ -23,7 +23,8 @@ namespace AudioAPP
                 options => options.UseSqlServer(builder.Configuration["Data:Connection"]));
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<AppDbContext>();
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<AppDbContext>();
 
             builder.Services.AddTransient<IRepository, Repository>();
             builder.Services.AddScoped<IRepository, Repository>();

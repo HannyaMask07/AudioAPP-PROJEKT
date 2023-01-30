@@ -15,7 +15,6 @@ namespace AudioApp.Controllers
         private readonly IRepository _repository;
         private readonly IFileManager _fileManager;
         private UserManager<IdentityUser> _userManager;
-
         public AudioController(IRepository repository, IFileManager fileManager, UserManager<IdentityUser> userManager)
         {
             _repository = repository;
@@ -23,11 +22,22 @@ namespace AudioApp.Controllers
             _userManager = userManager;
         }
 
-
         public IActionResult Index()
         {
             var audios = _repository.FindAll();
             return View(audios);
+        }
+        [Authorize(Roles = "admin")]
+        public IActionResult AdminPanel()
+        {
+            var audios = _repository.FindAll();
+            return View(audios);
+        }
+        [HttpGet]
+        public IActionResult SearchFind(string search)
+        {
+            var audios = _repository.SearchFind(search);
+            return View("Index", audios);
         }
         [Authorize]
         public IActionResult UserAudio()
@@ -89,7 +99,8 @@ namespace AudioApp.Controllers
                     Title = audio.Title,
                     Description = audio.Description,
                     Author = audio.Author,
-                    Comments = audio.Comments
+                    Comments = audio.Comments,
+                    AudioLikes = audio.AudioLikes
 
                 }) ;
 
@@ -111,7 +122,8 @@ namespace AudioApp.Controllers
                     Image = await _fileManager.SaveImage(viewModel.Image),
                     Sound = await _fileManager.SaveSound(viewModel.Sound),
                     Author = viewModel.Author,
-                    Comments = viewModel.Comments
+                    Comments = viewModel.Comments,
+                    AudioLikes = viewModel.AudioLikes
                 };
                 if (audio.Id > 0)
                 {
@@ -195,5 +207,27 @@ namespace AudioApp.Controllers
             _repository.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult AddLike(int id)
+        {
+            var Autor = _userManager.GetUserName(User);
+            var audio = _repository.FindBy(id);
+
+            var Like = new AudioLike
+            {
+                Author = Autor,
+                AudioId = id
+            };
+
+            audio.AudioLikes.Add(Like);
+            _repository.SaveLike(Like);
+            _repository.Update(audio);
+            _repository.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+      
     }
 }

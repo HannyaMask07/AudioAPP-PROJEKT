@@ -26,6 +26,44 @@ namespace AudioAPP.Controllers
             var profilePosts = _repository.FindAllProfiles();
             return View(profilePosts);
         }
+        [Authorize]
+        [HttpGet]
+        public IActionResult TagFindProfile1(string id)
+        {
+            int tag = 1;
+            var profilePosts = _repository.TagFindProfile(tag);
+            return View("Index", profilePosts);
+        }
+        [Authorize]
+        [HttpGet]
+        public IActionResult TagFindProfile2(string id)
+        {
+            int tag = 2;
+            var profilePosts = _repository.TagFindProfile(tag);
+            return View("Index", profilePosts);
+        }
+        [Authorize]
+        [HttpGet]
+        public IActionResult TagFindProfile3(string id)
+        {
+            int tag = 3;
+            var profilePosts = _repository.TagFindProfile(tag);
+            return View("Index", profilePosts);
+        }
+        [Authorize]
+        [HttpGet]
+        public IActionResult TagFindProfile4(string id)
+        {
+            int tag = 4;
+            var profilePosts = _repository.TagFindProfile(tag);
+            return View("Index", profilePosts);
+        }
+        [HttpGet]
+        public IActionResult SearchFind(string search)
+        {
+            var profiles = _repository.SearchFindProfile(search);
+            return View("Index", profiles);
+        }
         public IActionResult Details(int? id)
         {
             var profilePost = _repository.FindByProfile(id);
@@ -51,7 +89,7 @@ namespace AudioAPP.Controllers
                     Title = viewModel.Title,
                     Description = viewModel.Description,
                     Author = Autor,
-                    //Priorities = viewModel.Priorities
+                    Priorities = viewModel.Priorities
 
                 };
                 _repository.SaveProfile(profilePost);
@@ -79,7 +117,7 @@ namespace AudioAPP.Controllers
                     Title = profilePost.Title,
                     Description = profilePost.Description,
                     Author = profilePost.Author,
-                    //Priorities = profilePost.Priorities
+                    Priorities = profilePost.Priorities
 
                 });
 
@@ -99,7 +137,7 @@ namespace AudioAPP.Controllers
                     Title = viewModel.Title,
                     Description = viewModel.Description,
                     Author = viewModel.Author,
-                    //Priorities = viewModel.Priorities
+                    Priorities = viewModel.Priorities
                 };
                 if (profilePost.Id > 0)
                 {
@@ -120,7 +158,7 @@ namespace AudioAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            if (_repository.Delete(id))
+            if (_repository.DeleteProfilePost(id))
             {
                 await _repository.SaveChangesAsync();
                 return RedirectToAction("Index");

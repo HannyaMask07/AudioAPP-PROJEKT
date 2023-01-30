@@ -9,6 +9,7 @@ namespace AudioAPP.ViewModels
         public AudioViewModel()
         {
             Comments = new List<Comment>();
+            AudioLikes = new List<AudioLike>();
         }
         [HiddenInput]
         public int Id { get; set; }
@@ -22,6 +23,7 @@ namespace AudioAPP.ViewModels
         public DateTime Created { get; set; } = DateTime.Now;
         public string? Author { get; set; }
         public List<Comment> Comments { get; set; }
+        public List<AudioLike> AudioLikes { get; set; }
 
     }
 }

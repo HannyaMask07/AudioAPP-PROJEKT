@@ -18,6 +18,6 @@ namespace AudioAPP.ViewModels
         public string? Description { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
         public string? Author { get; set; }
-        //public Priority Priorities { get; set; }
+        public Priority Priorities { get; set; }
     }
 }

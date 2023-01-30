@@ -1,0 +1,70 @@
+﻿@model List<AudioAPP.Models.Audio>
+@inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Identity
+@{
+}
+<h1 class="text-uppercase m-1">Pliki MP3</h1>
+
+<div class="container border p-2 list-group" style="width:100%">
+
+    <form asp-controller="Audio" asp-action="SearchFind" method="get">
+        Wyszukaj tytuł: <input class="search" type="text" name="search"/>
+    </form>
+
+    @for (int i = @Model.Count-1; i>= 0; i--)
+    {
+        <div class="container m-2 p-2 border rounded">
+
+                 <a button asp-action="Edit" class="btn btn-warning"  asp-route-id="@Model[i].Id" >Edit</a>
+                                 <l>      </l>
+                  <a button asp-action="Remove" class="btn btn-danger"  asp-route-id="@Model[i].Id" >Remove</a>
+
+            <h2 class="text-center">@Model[i].Title</h2>
+
+            @if (!String.IsNullOrEmpty(@Model[i].Image))
+            {
+                var image_path = $"/Image/{@Model[i].Image}";
+                <h2 class="text-center">
+                <image src= @image_path  Width="300" Height="220" />
+                </h2>
+            }
+           @if (!String.IsNullOrEmpty(@Model[i].Sound))
+            {
+                var sound_path = $"/Sound/{@Model[i].Sound}";
+                 <h2 class="text-center">
+                <audio controls src = @sound_path/>
+                </h2>
+            }
+
+            <div class="text-center">
+            @Model[i].Description</div>
+
+            <div class = "comment-section">
+                    <a button asp-action="AddLike" class="btn btn-secondary" asp-route-id="@Model[i].Id">DajLajka</a>
+                    @Model[i].AudioLikes.Count
+                    <a button asp-action="AddComment" class="btn btn-primary"  asp-route-id="@Model[i].Id" >Skomentuj</a>
+                    <a button asp-action="Details" class="btn btn-secondary" asp-route-id="@Model[i].Id">Details</a> 
+
+            </div>
+               
+            @if (@Model[i].Comments is not null)
+            {                
+               <h1 class="text-uppercase m-1">Komentarze</h1>
+               <div class="container m-2 p-2 border rounded">
+               @foreach (var item in @Model[i].Comments)
+               {
+                 <div class = "comment-section">
+                   @item.Author :
+                   @item.Message
+                   //
+                   @item.Created
+                 </div>
+
+               }
+               </div>
+            }
+        </div>
+        
+    }
+
+</>

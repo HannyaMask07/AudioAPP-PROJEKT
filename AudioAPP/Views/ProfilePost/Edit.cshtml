@@ -1,4 +1,5 @@
 ﻿@model AudioAPP.ViewModels.ProfileViewModel
+@using AudioAPP.Models
 
 @{
 }
@@ -18,7 +19,11 @@
             <input asp-for="Description" />
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
-@*        <select class="form-control" asp-for="Priorities"asp-items= "@Html.GetEnumSelectList<Priority>()"></select>*@
+        <div class="mb-3">
+            <label asp-for="Priorities">Priorytet:</label>
+            <select asp-for="Priorities" class="form-control" asp-items="Html.GetEnumSelectList<Priority>()"> </select>
+            <span asp-validation-for="Priorities" class="text-danger"></span>
+        </div>
         <button type="submit" value="Submit" class="btn btn-primary">Dalej</button>
     </form>
 </div>

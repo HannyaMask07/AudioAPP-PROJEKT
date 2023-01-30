@@ -10,6 +10,9 @@ namespace AudioAPP.Data.Repository.Repository
         public bool Update(Audio? audio);
         public Audio? FindBy(int? id);
         public IEnumerable<Audio?> FindAll();
+        public IEnumerable<Audio?> SearchFind(string search);
+        public IEnumerable<Profile?> SearchFindProfile(string search);
+        public IEnumerable<Profile?> TagFindProfile(int tag);
         public Comment? FindByAudioComment(int? id);
         Task<bool> SaveChangesAsync();
         public Profile? SaveProfile(Profile? profile);
@@ -17,6 +20,8 @@ namespace AudioAPP.Data.Repository.Repository
         public bool UpdateProfile(Profile? profile);
         public IEnumerable<Profile?> FindAllProfiles();
         public Comment? SaveComment(Comment? comment);
+        public bool DeleteProfilePost(int? id);
+        public AudioLike? SaveLike(AudioLike? audioLike);
         public void SaveChanges();
 
         //Audio GetAudio(int id);

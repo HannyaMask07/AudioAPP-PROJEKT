@@ -56,6 +56,28 @@ namespace AudioAPP.Migrations
                     b.ToTable("Audios");
                 });
 
+            modelBuilder.Entity("AudioAPP.Models.AudioLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AudioId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AudioId");
+
+                    b.ToTable("AudioLikes");
+                });
+
             modelBuilder.Entity("AudioAPP.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -103,6 +125,9 @@ namespace AudioAPP.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("Priorities")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -142,15 +167,15 @@ namespace AudioAPP.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "af16734f-9ef9-4402-9e45-6e8039f0f5f3",
-                            ConcurrencyStamp = "007c89cd-1c12-48dc-a2f9-53cd4bb46c44",
+                            Id = "7b4a0f5f-b2d6-4149-bf11-766dfc5ce42a",
+                            ConcurrencyStamp = "ff2cc5c4-00d5-4c02-b954-0f99ce71d7d9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5597d974-43a2-43c3-b82a-b4f7b58bf886",
-                            ConcurrencyStamp = "2ed35202-f341-46b2-91b3-bf91fbf726fd",
+                            Id = "4e4b1e57-e491-40fc-97cf-f4e97767b942",
+                            ConcurrencyStamp = "109b5f4b-24b2-4db0-bbc6-c8cedaa2af75",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -331,6 +356,15 @@ namespace AudioAPP.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AudioAPP.Models.AudioLike", b =>
+                {
+                    b.HasOne("AudioAPP.Models.Audio", null)
+                        .WithMany("AudioLikes")
+                        .HasForeignKey("AudioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AudioAPP.Models.Comment", b =>
                 {
                     b.HasOne("AudioAPP.Models.Audio", null)
@@ -393,6 +427,8 @@ namespace AudioAPP.Migrations
 
             modelBuilder.Entity("AudioAPP.Models.Audio", b =>
                 {
+                    b.Navigation("AudioLikes");
+
                     b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
