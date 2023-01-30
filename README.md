@@ -22,12 +22,14 @@ Może robić to samo co użytkownik nie zalogowany oraz:
 -Likować posty
 
 -Dodawać audio posty
+![image](https://user-images.githubusercontent.com/92157132/215588836-8034ef13-ac3e-4eec-89b8-c2896868f0ef.png)
 
 -Edytować swoje audio posty
 
 -Usuwać swoje audio posty
 
 -Dodawać posty w zakładce aktualności i wykonywać na nich CRUD
+![image](https://user-images.githubusercontent.com/92157132/215589087-dfad217c-38a5-4e1c-afc0-4c24062ceb50.png)
 
 # Użytkownik zalogowany jako administrator
 ![AdminPanelView](https://user-images.githubusercontent.com/92157132/215588108-bd5fb55b-ee4b-4082-96ed-8042caf78b95.png)
