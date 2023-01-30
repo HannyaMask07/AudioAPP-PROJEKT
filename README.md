@@ -27,7 +27,7 @@ może robić to samo co użytkownik nie zalogowany oraz:
 
 -Dodawać posty w zakładce aktualności i wykonywać na nich CRUD
 
-#Użytkownik zalogowany jako administrator
+# Użytkownik zalogowany jako administrator
 
 -Dostaje dostęp do Admin Panelu, z którego może wykonywać czynności CRUD na wszystkich postach
 
