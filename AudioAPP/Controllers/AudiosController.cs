@@ -25,13 +25,13 @@ namespace AudioAPP.Controllers
         [HttpGet("{id}", Name = "Get")]
         public ActionResult<Audio> Get(int id)
         {
-            try
-            {
-                return _repository.FindBy(id);
-            }
-            catch (Exception)
+            if (_repository.FindBy(id) is null)
             {
                 return NotFound();
+            }
+            else
+            {
+                return _repository.FindBy(id);
             }
 
         }

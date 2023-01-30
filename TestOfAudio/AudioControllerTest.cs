@@ -34,20 +34,25 @@ namespace TestOfAudio
             var actionResult = _controller.Get(1);
             Audio audio = Assert.IsType<Audio>(actionResult.Value);
             Assert.Equal(audio.Id, _service.FindBy(audio.Id).Id);
+            var actionResult1 = _controller.Get(50);
+            Assert.IsType<NotFoundResult>(actionResult1.Result);
         }
-        //[Fact]
-        //public void PostTest()
-        //{
-        //    Audio audio2 = new Audio()
-        //    {
-        //        Title= "T",
-        //        Description = "Test1",
-        //        Sound = "Test2"
-        //    };
-        //    var action = _controller.Post(audio2);
-        //    Assert.IsType<BadRequestResult>(action);
+        [Fact]
+        public void PostTest()
+        {
+            Audio audio2 = new Audio()
+            {
+                Title = "Title",
+                Description = "Test1",
+                Sound = "Test2"
+            };
+            Audio audio3 = null;
 
-        //}
+            var actionResult = _controller.Post(audio2);
+            Assert.IsType<CreatedResult>(actionResult.Result);
+            var actionResult1 = _controller.Post(audio3);
+            Assert.IsType<BadRequestResult>(actionResult1.Result);
+        }
         [Fact]
         public void DeleteTest()
         {

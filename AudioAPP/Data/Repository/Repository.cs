@@ -144,7 +144,10 @@ namespace AudioAPP.Data.Repository.Repository
         public Audio? FindBy(int? id)
         {
             Audio? audio = _context.Audios.Include(a => a.Comments).Include(a => a.AudioLikes).FirstOrDefault(b => b.Id == id);
-            _context.Entry(audio).State = EntityState.Detached;
+            if (audio is not null)
+            {
+                _context.Entry(audio).State = EntityState.Detached;
+            }
             return id is null ? null : audio;
         }
         //public Comment? FindByAudioComment(int? id)
